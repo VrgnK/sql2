@@ -1,0 +1,49 @@
+-- задача 1 код SQL
+
+DELIMITER //
+
+CREATE FUNCTION ConvertSecondsToDaysHoursMinutesSeconds(seconds INT) RETURNS VARCHAR(50) DETERMINISTIC
+BEGIN
+    DECLARE days INT;
+    DECLARE hours INT;
+    DECLARE minutes INT;
+    DECLARE secondsLeft INT;
+    
+    SET days = FLOOR(seconds / 86400);
+    SET seconds = seconds % 86400;
+    
+    SET hours = FLOOR(seconds / 3600);
+    SET seconds = seconds % 3600;
+    
+    SET minutes = FLOOR(seconds / 60);
+    SET secondsLeft = seconds % 60;
+    
+    RETURN CONCAT(days, ' days ', hours, ' hours ', minutes, ' minutes ', secondsLeft, ' seconds');
+END//
+
+DELIMITER ;
+SELECT ConvertSecondsToDaysHoursMinutesSeconds(123456);
+
+-- задача 2
+
+DELIMITER //
+
+CREATE PROCEDURE DivisibleBy15Or33()
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    DECLARE result VARCHAR(1000) DEFAULT '';
+    
+    WHILE i <= 1000 DO
+        IF (i % 15 = 0) OR (i % 33 = 0) THEN
+            SET result = CONCAT(result, i, ',');
+        END IF;
+        SET i = i + 1;
+    END WHILE;
+    
+        SET result = TRIM(TRAILING ',' FROM result);
+    
+    SELECT result AS 'Numbers divisible by 15 or 33';
+END//
+
+DELIMITER ;
+CALL DivisibleBy15Or33();
